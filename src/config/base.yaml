@@ -1,0 +1,46 @@
+EXP_NAME: base
+SEED: 42
+
+WANDB:
+    project: lightning-template
+    entity: youngerous 
+
+DATASET:
+    name: imdb
+
+GPU:
+    accelerator: gpu # set "cpu" for debugging
+    strategy: ddp # [null, ddp, dp, ...]
+    devices: -1
+
+MODEL:
+    pretrained: bert-base-uncased
+    load_ckpt_pth: null # src/checkpoints/base/ckpt-epoch=01-val_loss=0.1834.ckpt
+    CHECKPOINT:
+        dirpath: src/checkpoints/
+        filename: ckpt-{epoch:03d}-{val_loss:.5f}
+        save_top_k: 2
+        monitor: val_loss
+ 
+MODE:
+    do_train_only: False
+    do_test_only: False
+
+TRAIN:
+    epoch: 5
+    batch_size: 16
+    lr: 5e-5
+    num_workers: 1
+    backend: native
+    precision: 32 
+    max_steps: -1 # default: disabled
+    gradient_clip_val: 0.0 # default: not cliping
+    accumulate_grad_batches: 1
+    warmup_steps: 100
+
+VALIDATION:
+    interval: 1
+    earlystop_patience: 3
+
+LOG:
+    interval: 50
