@@ -54,13 +54,25 @@ class BaseDataModule(pl.LightningDataModule):
             self.tst_dset = IMDB(self.tokenizer, dset["text"], dset["label"])
 
     def train_dataloader(self):
-        return DataLoader(self.trn_dset, batch_size=self.cfg["TRAIN"]["batch_size"])
+        return DataLoader(
+            self.trn_dset,
+            num_workers=self.cfg["TRAIN"]["num_workers"],
+            batch_size=self.cfg["TRAIN"]["batch_size"],
+        )
 
     def val_dataloader(self):
-        return DataLoader(self.val_dset, batch_size=self.cfg["TRAIN"]["batch_size"])
+        return DataLoader(
+            self.val_dset,
+            num_workers=self.cfg["TRAIN"]["num_workers"],
+            batch_size=self.cfg["TRAIN"]["batch_size"],
+        )
 
     def test_dataloader(self):
-        return DataLoader(self.tst_dset, batch_size=self.cfg["TRAIN"]["batch_size"])
+        return DataLoader(
+            self.tst_dset,
+            num_workers=self.cfg["TRAIN"]["num_workers"],
+            batch_size=self.cfg["TRAIN"]["batch_size"],
+        )
 
     # def predict_dataloader(self):
     #     return DataLoader(self.mnist_predict, batch_size=self.batch_size)

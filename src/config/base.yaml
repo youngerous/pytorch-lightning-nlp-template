@@ -15,7 +15,7 @@ GPU:
 
 MODEL:
     pretrained: bert-base-uncased
-    load_ckpt_pth: null # src/checkpoints/base/ckpt-epoch=01-val_loss=0.1834.ckpt
+    load_ckpt_pth: null # src/checkpoints/base/ckpt-epoch=001-val_loss=0.18344.ckpt
     CHECKPOINT:
         dirpath: src/checkpoints/
         filename: ckpt-{epoch:03d}-{val_loss:.5f}
@@ -24,13 +24,13 @@ MODEL:
  
 MODE:
     do_train_only: False
-    do_test_only: False
+    do_test_only: False 
 
 TRAIN:
-    epoch: 5
+    epoch: 3
     batch_size: 16
     lr: 5e-5
-    num_workers: 1
+    num_workers: 4
     backend: native
     precision: 32 
     max_steps: -1 # default: disabled

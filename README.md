@@ -1,7 +1,7 @@
 # Minimal PyTorch-Lightning NLP Template with WandB ⚡️
 
 
-PyTorch-lightning template for easy use! (actually, for my own😉)
+PyTorch-Lightning template for easy use! (actually, for my own😉)
 - This template is for fast prototyping of research ideas.
 - This template follows [black](https://github.com/psf/black) code formatting.
 - Hyperparameters are managed with YAML file.

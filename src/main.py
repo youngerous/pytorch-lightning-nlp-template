@@ -16,6 +16,14 @@ from loader import BaseDataModule
 from model import BaseModel
 
 
+def set_experiment_name(cfg):
+    # set customized experiment name (useful when tuning hparams)
+    name = f"""
+    {cfg['EXP_NAME']}-ep{cfg['TRAIN']['epoch']}
+    """.strip()
+    return name
+
+
 def run(cfg):
     pl.seed_everything(cfg["SEED"])
 
@@ -23,12 +31,13 @@ def run(cfg):
     datamodule = BaseDataModule(config=cfg, tokenizer=tokenizer)
     model = BaseModel(config=cfg, tokenizer=tokenizer)
 
+    exp_name = set_experiment_name(cfg)
     wandb_logger = WandbLogger(
-        name=cfg["EXP_NAME"],
+        name=exp_name,
         project=cfg["WANDB"]["project"],
         entity=cfg["WANDB"]["entity"],
     )
-    ckpt_pth = os.path.join(cfg["MODEL"]["CHECKPOINT"]["dirpath"], cfg["EXP_NAME"])
+    ckpt_pth = os.path.join(cfg["MODEL"]["CHECKPOINT"]["dirpath"], exp_name)
     callbacks = (
         [
             ModelCheckpoint(
