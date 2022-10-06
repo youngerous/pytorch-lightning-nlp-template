@@ -18,15 +18,16 @@ class BaseModel(LightningModule):
 
     def configure_optimizers(self):
         # optimizer
-        optimizer = AdamW(self.parameters(), lr=float(self.cfg["TRAIN"]["lr"]))
+        optimizer = AdamW(
+            self.parameters(), lr=float(self.cfg["TRAIN"]["LR"]["lr_max"])
+        )
 
         # noam lr scheduler
-        ## total_steps = self.trainer.estimated_stepping_batches
         def warm_decay(step):
             warmup_steps = self.cfg["TRAIN"]["warmup_steps"]
             if step < warmup_steps:
                 return step / warmup_steps
-            return warmup_steps ** 0.5 * step ** -0.5
+            return self.cfg["TRAIN"]["LR"]["lr_lambda"] ** step
 
         scheduler = {
             "scheduler": torch.optim.lr_scheduler.LambdaLR(optimizer, warm_decay),

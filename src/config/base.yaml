@@ -29,7 +29,9 @@ MODE:
 TRAIN:
     epoch: 3
     batch_size: 16
-    lr: 5e-5
+    LR:
+        lr_max: 5e-5
+        lr_lambda: 0.9998 # the smaller lambda, the faster lr decreases.
     num_workers: 4
     backend: native
     precision: 32 
