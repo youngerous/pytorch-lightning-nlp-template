@@ -39,7 +39,7 @@ $ sh run.sh
 ### 3.1. Model Performance
 |           Task           | Dataset | Model | Test Accuracy |
 | :----------------------: | :-----: | :---: | :-----------: |
-| Sentiment Classification |  IMDB   | BERT-base  |      92.75%      |
+| Sentiment Classification |  IMDB   | BERT-base  |      93.52%      |
 
 ### 3.2. WandB Logging Results
 ![logging](assets/logging.png)

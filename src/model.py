@@ -1,7 +1,8 @@
 import torch
 from datasets import load_metric
 from pytorch_lightning import LightningModule
-from transformers import AdamW, BertForSequenceClassification
+from torch.optim import AdamW
+from transformers import BertForSequenceClassification, get_linear_schedule_with_warmup
 
 
 class BaseModel(LightningModule):
@@ -18,22 +19,28 @@ class BaseModel(LightningModule):
 
     def configure_optimizers(self):
         # optimizer
-        optimizer = AdamW(
-            self.parameters(), lr=float(self.cfg["TRAIN"]["LR"]["lr_max"])
+        optimizer = AdamW(self.parameters(), lr=float(self.cfg["TRAIN"]["lr"]))
+
+        # scheduler with warmup
+        num_devices = (
+            torch.cuda.device_count()
+            if self.trainer.devices == -1
+            else int(self.trainer.devices)
         )
-
-        # noam lr scheduler
-        def warm_decay(step):
-            warmup_steps = self.cfg["TRAIN"]["warmup_steps"]
-            if step < warmup_steps:
-                return step / warmup_steps
-            return self.cfg["TRAIN"]["LR"]["lr_lambda"] ** step
-
+        total_steps = (
+            len(self.trainer.datamodule.train_dataloader())
+            // self.cfg["TRAIN"]["accumulate_grad_batches"]
+            // num_devices
+            * self.cfg["TRAIN"]["epoch"]
+        )
+        warmup_steps = int(total_steps * self.cfg["TRAIN"]["warmup_ratio"])
         scheduler = {
-            "scheduler": torch.optim.lr_scheduler.LambdaLR(optimizer, warm_decay),
+            "scheduler": get_linear_schedule_with_warmup(
+                optimizer, num_warmup_steps=warmup_steps, num_training_steps=total_steps
+            ),
             "interval": "step",  # runs per batch rather than per epoch
             "frequency": 1,
-            # "name" : "learning_rate" # uncomment if using LearningRateMonitor
+            "name": "learning_rate",
         }
 
         return [optimizer], [scheduler]
