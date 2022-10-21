@@ -37,12 +37,12 @@ class BaseDataModule(pl.LightningDataModule):
 
     def prepare_data(self):
         """Only called from the main process for downloading dataset"""
-        load_dataset(self.cfg["DATASET"]["name"], split="train")
-        load_dataset(self.cfg["DATASET"]["name"], split="test")
+        load_dataset(self.cfg.dataset_name, split="train")
+        load_dataset(self.cfg.dataset_name, split="test")
 
     def setup(self, stage: str):
         if stage == "fit":
-            dset = load_dataset(self.cfg["DATASET"]["name"], split="train")
+            dset = load_dataset(self.cfg.dataset_name, split="train")
             trn_text, val_text, trn_label, val_label = train_test_split(
                 dset["text"], dset["label"], test_size=0.1
             )
@@ -50,28 +50,28 @@ class BaseDataModule(pl.LightningDataModule):
             self.val_dset = IMDB(self.tokenizer, val_text, val_label)
 
         if stage == "test":
-            dset = load_dataset(self.cfg["DATASET"]["name"], split="test")
+            dset = load_dataset(self.cfg.dataset_name, split="test")
             self.tst_dset = IMDB(self.tokenizer, dset["text"], dset["label"])
 
     def train_dataloader(self):
         return DataLoader(
             self.trn_dset,
-            num_workers=self.cfg["TRAIN"]["num_workers"],
-            batch_size=self.cfg["TRAIN"]["batch_size"],
+            num_workers=self.cfg.num_workers,
+            batch_size=self.cfg.batch_size,
         )
 
     def val_dataloader(self):
         return DataLoader(
             self.val_dset,
-            num_workers=self.cfg["TRAIN"]["num_workers"],
-            batch_size=self.cfg["TRAIN"]["batch_size"],
+            num_workers=self.cfg.num_workers,
+            batch_size=self.cfg.batch_size,
         )
 
     def test_dataloader(self):
         return DataLoader(
             self.tst_dset,
-            num_workers=self.cfg["TRAIN"]["num_workers"],
-            batch_size=self.cfg["TRAIN"]["batch_size"],
+            num_workers=self.cfg.num_workers,
+            batch_size=self.cfg.batch_size,
         )
 
     # def predict_dataloader(self):

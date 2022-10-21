@@ -3,10 +3,10 @@
 
 PyTorch-Lightning template for easy use! (actually, for my own😉)
 - This template is for fast prototyping of research ideas.
-- This template follows [black](https://github.com/psf/black) code formatting.
-- Hyperparameters are managed with YAML file.
+- This template follows [Black](https://github.com/psf/black) code formatting.
 - This template contains a simple BERT classification code.
 - This template contains simple [WandB](https://wandb.ai/site) application.
+- Use [Sweep](https://docs.wandb.ai/guides/sweeps) for hyperparameter tuning.
 - **Note**: You should enter WandB account information on the first run.
 
 ## 1. Set Environments

@@ -12,14 +12,14 @@ class BaseModel(LightningModule):
         self.cfg = config
         self.tokenizer = tokenizer
         self.model = BertForSequenceClassification.from_pretrained(
-            self.cfg["MODEL"]["pretrained"]
+            self.cfg.model_pretrained
         )
         self.accuracy = load_metric("accuracy")
         # self.save_hyperparameters()
 
     def configure_optimizers(self):
         # optimizer
-        optimizer = AdamW(self.parameters(), lr=float(self.cfg["TRAIN"]["lr"]))
+        optimizer = AdamW(self.parameters(), lr=float(self.cfg.lr))
 
         # scheduler with warmup
         num_devices = (
@@ -29,11 +29,11 @@ class BaseModel(LightningModule):
         )
         total_steps = (
             len(self.trainer.datamodule.train_dataloader())
-            // self.cfg["TRAIN"]["accumulate_grad_batches"]
+            // self.cfg.accumulate_grad_batches
             // num_devices
-            * self.cfg["TRAIN"]["epoch"]
+            * self.cfg.epoch
         )
-        warmup_steps = int(total_steps * self.cfg["TRAIN"]["warmup_ratio"])
+        warmup_steps = int(total_steps * self.cfg.warmup_ratio)
         scheduler = {
             "scheduler": get_linear_schedule_with_warmup(
                 optimizer, num_warmup_steps=warmup_steps, num_training_steps=total_steps

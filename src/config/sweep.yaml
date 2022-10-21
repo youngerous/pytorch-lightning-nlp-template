@@ -1,0 +1,25 @@
+# Hyperparameter tuning example
+# Sweep docs: https://docs.wandb.ai/guides/sweeps
+command:
+  - ${env}
+  - ${interpreter}
+  - ${program}
+  - ${args}
+
+name: project-hparam-search
+description: detailed explanation
+program: src/main.py
+method: grid
+metric:
+  name: val_loss
+  goal: minimize
+
+parameters:
+  exp_name: 
+    value: sweep
+  epoch:
+    value: 1
+  lr:
+    values: [1e-5, 5e-5]
+
+  
