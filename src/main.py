@@ -49,6 +49,7 @@ def run(cfg):
             EarlyStopping(
                 monitor=cfg.checkpoint_monitor,
                 patience=cfg.earlystop_patience,
+                verbose=True,
             ),
             LearningRateMonitor(logging_interval="step"),
         ]
