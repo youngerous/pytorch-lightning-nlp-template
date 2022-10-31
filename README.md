@@ -1,11 +1,12 @@
 # Minimal PyTorch-Lightning NLP Template with WandB ⚡️
 
+> Hope to customize the pipeline in detail? How about [this template with vanila PyTorch](https://github.com/youngerous/pytorch-nlp-wandb-hydra-template)?
 
 PyTorch-Lightning template for easy use! (actually, for my own😉)
 - This template is for fast prototyping of research ideas.
 - This template follows [Black](https://github.com/psf/black) code formatting.
 - This template contains a simple BERT classification code.
-- This template contains simple [WandB](https://wandb.ai/site) application.
+- This template contains a simple [WandB](https://wandb.ai/site) application.
 - Use [Sweep](https://docs.wandb.ai/guides/sweeps) for hyperparameter tuning.
 - **Note**: You should enter WandB account information on the first run.
 
